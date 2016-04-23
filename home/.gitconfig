@@ -1,6 +1,6 @@
 [user]
-	name = Todd Gamblin
-	email = tgamblin@llnl.gov
+	name = Nikhil Jain
+	email = nikhil.jain@acm.org
 
 [merge]
 	tool = opendiff
@@ -8,9 +8,19 @@
 [color]
 	ui = auto
 
+[push]
+	default = tracking
+
 [core]
-	excludesfile = /Users/gamblin2/.gitignore_global
-    pager = less -R
+  pager = less -R
+	editor = vim
+  fileMode = false
+
+[init]
+	templatedir = ~/.git_template
+
+[credential]
+	helper = cache --timeout=43200
 
 [pager]
     # Preserve color and don't wrap lines in my fancy git logs (see below)
@@ -87,12 +97,6 @@
 	lcontrib = "!f() { for file in $(git ls-tree --name-only -r HEAD -- $(for d in \"$@\"; do echo \"${GIT_PREFIX:-${d}}\"; done)); do git blame -w --line-porcelain $file | perl -ne 'if (/^[0-9a-f]{40} / .. /^filename /) { $author = $_ if (s/^author //); } else { print $author unless /^\\s*(\\#.*)?$/; }'; done | sort | uniq -c | sort -nr; }; f"
 	ghstats = "!f() { printf \"%-8s%-9s%-9s%-9s%s\\n\" '#' COMMITS INSERTED DELETED AUTHOR; git log --use-mailmap --shortstat  HEAD -- $(for d in \"$@\"; do echo \"${GIT_PREFIX:-${d}}\"; done) | perl -e 'while (<>) { if (/^Author: (.*)$/) { $a = $1; $c{$a} = 0 unless defined $c{$a}; $i{$a}=0 unless defined $i{$a}; $d{$a}=0 unless defined $d{$a}; } if (/^ (\\d+) files? changed(?:, (\\d+) insertions?\\(\\+\\))?(?:, (\\d+) deletions?\\(\\-\\))?/) { $c{$a} += 1; $i{$a} += $2; $d{$a} += $3; } }; printf(\"%-9d%-9d%-9d%s\\n\", $c{$_}, $i{$_}, $d{$_}, $_) for (keys %i);' | sort -nr | nl -n ln -w 5; }; f"
 
-[push]
-	default = simple
-
-[credential]
-	helper = cache --timeout=43200
-
 [http]
 	postBuffer = 524288000
 
@@ -100,9 +104,3 @@
 	prompt = false
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 
-[mergetool "sourcetree"]
-	cmd = /Users/gamblin2/Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
